@@ -82,6 +82,86 @@
       },
       "response": []
     }
+    ,
+    {
+      "name": "Perkawinan - Submit",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nama_pemohon\": \"Nama\",\n  \"nik_pemohon\": \"1234567890123456\",\n  \"no_hp_pemohon\": \"081234567890\",\n  \"nama_pasangan\": \"Nama Pasangan\",\n  \"nik_pasangan\": \"6543210987654321\",\n  \"no_hp_pasangan\": \"081234567891\",\n  \"alamat_domisili\": \"Jl Test\",\n  \"tanggal_perkawinan\": \"2026-01-30\",\n  \"tempat_perkawinan\": \"KUA\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/perkawinan/submit",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "perkawinan",
+            "submit"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Perkawinan - Status",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/perkawinan/:uuid/status?nik_pemohon=1234567890123456",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "perkawinan",
+            ":uuid",
+            "status"
+          ],
+          "query": [
+            {
+              "key": "nik_pemohon",
+              "value": "1234567890123456"
+            }
+          ]
+        }
+      },
+      "response": []
+    }
+    ,
+    {
+      "name": "Auth - Refresh Access Token",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{refresh_token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/auth/refresh",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "auth",
+            "refresh"
+          ]
+        }
+      },
+      "response": []
+    }
   ],
   "event": [],
   "variable": [

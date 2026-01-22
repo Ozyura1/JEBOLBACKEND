@@ -41,10 +41,22 @@ class User extends Authenticatable
      *
      * @return array<string, string>
      */
-    protected function casts(): array
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array<string,string>
+     */
+    protected $casts = [
+        'password' => 'hashed',
+        'is_active' => 'boolean',
+    ];
+
+    /**
+     * Use `username` as the authentication identifier name instead of `email`.
+     * This tells the framework which column to treat as the login field.
+     */
+    public function getAuthIdentifierName(): string
     {
-        return [
-            'password' => 'hashed',
-        ];
+        return 'username';
     }
 }

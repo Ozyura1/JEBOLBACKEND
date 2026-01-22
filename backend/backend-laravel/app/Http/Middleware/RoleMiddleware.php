@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use App\Support\ApiResponder;
 use Symfony\Component\HttpFoundation\Response;
 
 class RoleMiddleware
@@ -13,8 +14,7 @@ class RoleMiddleware
      *
      * Usage:
      *  - role:SUPER_ADMIN
-     *  - role:ADMIN_KTP|SUPER_ADMIN
-     *  - role:module:ktp  => maps to ADMIN_KTP
+    *  - role:SUPER_ADMIN,ADMIN_KTP
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Closure  $next
@@ -26,39 +26,28 @@ class RoleMiddleware
         $user = $request->user();
 
         if (! $user) {
-            return response()->json(['message' => 'Unauthenticated'], Response::HTTP_UNAUTHORIZED);
+            return ApiResponder::error('Unauthenticated', Response::HTTP_UNAUTHORIZED);
         }
 
-        // SUPER_ADMIN always allowed
+        if (empty($roles)) {
+            return ApiResponder::error('Forbidden', Response::HTTP_FORBIDDEN);
+        }
+
+        // Roles are provided as comma-separated list
+        $candidates = array_filter(array_map('trim', explode(',', $roles)));
+
+        // SUPER_ADMIN can access all admin routes
         if (isset($user->role) && $user->role === 'SUPER_ADMIN') {
             return $next($request);
         }
 
-        if (empty($roles)) {
-            return response()->json(['message' => 'Forbidden'], Response::HTTP_FORBIDDEN);
-        }
-
-        // Roles can be provided as pipe-separated list
-        $candidates = explode('|', $roles);
-
         foreach ($candidates as $candidate) {
-            $candidate = trim($candidate);
-
-            if (stripos($candidate, 'module:') === 0) {
-                $module = strtoupper(substr($candidate, 7));
-                $required = 'ADMIN_' . $module;
-                if (isset($user->role) && $user->role === $required) {
-                    return $next($request);
-                }
-                continue;
-            }
-
-            // direct role match
+            // direct role match only (no fallback)
             if (isset($user->role) && $user->role === $candidate) {
                 return $next($request);
             }
         }
 
-        return response()->json(['message' => 'Forbidden'], Response::HTTP_FORBIDDEN);
+        return ApiResponder::error('Forbidden', Response::HTTP_FORBIDDEN);
     }
 }

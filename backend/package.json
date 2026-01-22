@@ -1,11 +1,11 @@
 {
   "name": "jebolmobile-backend",
   "version": "1.0.0",
-  "description": "Backend API for JEBOLMobile app",
+  "description": "DEPRECATED - Backend API for JEBOLMobile app - Use Laravel backend instead",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
-    "dev": "nodemon server.js"
+    "start": "echo 'ERROR: This Node.js backend is DEPRECATED. Use Laravel backend-laravel/ instead.' && exit 1",
+    "dev": "echo 'ERROR: This Node.js backend is DEPRECATED. Use Laravel backend-laravel/ instead.' && exit 1"
   },
   "dependencies": {
     "express": "^4.18.2",

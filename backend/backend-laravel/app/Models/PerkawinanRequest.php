@@ -8,14 +8,26 @@ class PerkawinanRequest extends Model
 {
     protected $table = 'perkawinan_requests';
     protected $fillable = [
-        'uuid', 'nama_pemohon', 'nama_pasangan', 'tanggal_perkawinan', 'tempat', 'dokumen', 'status',
-        'nik_pemohon', 'nik_pasangan', 'alamat', 'no_hp_pemohon', 'catatan_admin', 'verified_by_user_id', 'verified_at',
+        'nama_pemohon',
+        'nik_pemohon',
+        'no_hp_pemohon',
+        'nama_pasangan',
+        'nik_pasangan',
+        'no_hp_pasangan',
+        'alamat_domisili',
+        'tanggal_perkawinan',
+        'tempat_perkawinan',
+        'dokumen',
+        'status',
+        'catatan_admin',
+        'verified_by_user_id',
+        'verified_at',
     ];
 
     protected $casts = [
-        'dokumen' => 'array',
         'tanggal_perkawinan' => 'date',
         'verified_at' => 'datetime',
+        'dokumen' => 'array',
     ];
 
     public static function boot()
@@ -26,5 +38,10 @@ class PerkawinanRequest extends Model
                 $model->uuid = (string) \Illuminate\Support\Str::uuid();
             }
         });
+    }
+
+    public function verifiedBy()
+    {
+        return $this->belongsTo(\App\Models\User::class, 'verified_by_user_id');
     }
 }

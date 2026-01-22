@@ -167,9 +167,11 @@ return [
     | to the server if the browser has a HTTPS connection. This will keep
     | the cookie from being sent to you when it can't be done securely.
     |
+    | SECURITY: Production MUST use HTTPS. Set SESSION_SECURE_COOKIE=true.
+    |
     */
 
-    'secure' => env('SESSION_SECURE_COOKIE'),
+    'secure' => env('SESSION_SECURE_COOKIE', env('APP_ENV') === 'production'),
 
     /*
     |--------------------------------------------------------------------------
@@ -179,6 +181,8 @@ return [
     | Setting this value to true will prevent JavaScript from accessing the
     | value of the cookie and the cookie will only be accessible through
     | the HTTP protocol. It's unlikely you should disable this option.
+    |
+    | SECURITY: MUST be true for government systems to prevent XSS attacks.
     |
     */
 
@@ -192,6 +196,9 @@ return [
     | This option determines how your cookies behave when cross-site requests
     | take place, and can be used to mitigate CSRF attacks. By default, we
     | will set this value to "lax" to permit secure cross-site requests.
+    |
+    | SECURITY: For API-only systems (mobile apps), 'lax' is acceptable.
+    | For government systems with API tokens, 'lax' provides CSRF protection.
     |
     | See: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie#samesitesamesite-value
     |

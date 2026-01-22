@@ -18,6 +18,10 @@ class DatabaseSeeder extends Seeder
         // Seed an initial SUPER_ADMIN
         $this->call([
             \Database\Seeders\SuperAdminSeeder::class,
+            \Database\Seeders\AdminPerkawinanSeeder::class,
+            \Database\Seeders\AdminKtpSeeder::class,
+            \Database\Seeders\AdminIkdSeeder::class,
+            \Database\Seeders\RtSeeder::class,
         ]);
     }
 }
