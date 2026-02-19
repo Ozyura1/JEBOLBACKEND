@@ -1,0 +1,17 @@
+.git
+.github
+.editorconfig
+.gitattributes
+.env.example
+TESTING_*
+*.md
+docs/
+postman/
+scripts/
+tests/
+phpunit.xml
+coverage/
+.DS_Store
+*.log
+Dockerfile
+docker-compose.yml
