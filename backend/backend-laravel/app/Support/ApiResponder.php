@@ -20,6 +20,11 @@ class ApiResponder
         return response()->json($payload, $status);
     }
 
+    public static function successResponse(mixed $data = null, string $message = '', int $status = 200, array $meta = null)
+    {
+        return self::success($data, $message, $status, $meta);
+    }
+
     public static function error(string $message, int $status = 400, array $errors = null, mixed $data = null)
     {
         $payload = [

@@ -1,0 +1,1429 @@
+{
+  "info": {
+    "name": "JEBOL Complete API Testing - FIXED",
+    "_postman_id": "jebol-complete-testing-fixed",
+    "description": "Comprehensive testing for JEBOL API - All modules, all roles, all scenarios - FIXED to match backend documentation",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://127.0.0.1:8000",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "refresh_token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "superadmin_token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "admin_ktp_token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "admin_ikd_token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "admin_perkawinan_token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "rt_token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "ktp_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "ikd_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "perkawinan_uuid",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "🔐 AUTHENTICATION",
+      "item": [
+        {
+          "name": "1.1.1 Login - SUPER_ADMIN",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "try {",
+                  "  pm.test('Status 200 OK', function() {",
+                  "    pm.response.to.have.status(200);",
+                  "  });",
+                  "  ",
+                  "  let body = pm.response.json();",
+                  "  let data = body.data ?? body;",
+                  "  ",
+                  "  pm.test('Response has token in data', function() {",
+                  "    pm.expect(data.token).to.be.a('string');",
+                  "    pm.expect(data.token.length).to.be.greaterThan(0);",
+                  "  });",
+                  "  ",
+                  "  pm.test('Response has refresh_token', function() {",
+                  "    pm.expect(data.refresh_token).to.be.a('string');",
+                  "  });",
+                  "  ",
+                  "  pm.test('User role is SUPER_ADMIN', function() {",
+                  "    pm.expect(data.role).to.equal('SUPER_ADMIN');",
+                  "  });",
+                  "  ",
+                  "  pm.environment.set('superadmin_token', data.token);",
+                  "  pm.environment.set('token', data.token);",
+                  "  pm.environment.set('refresh_token', data.refresh_token);",
+                  "} catch (e) {",
+                  "  pm.test('JSON Parse Error', () => { throw new Error('Response parse error: ' + e.message); });",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"superadmin\",\n  \"password\": \"ChangeMe123!\",\n  \"device_name\": \"postman\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "1.1.2 Login - ADMIN_KTP",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "try {",
+                  "  pm.test('Status 200 OK', function() {",
+                  "    pm.response.to.have.status(200);",
+                  "  });",
+                  "  ",
+                  "  let body = pm.response.json();",
+                  "  let data = body.data ?? body;",
+                  "  ",
+                  "  pm.test('User role is ADMIN_KTP', function() {",
+                  "    pm.expect(data.role).to.equal('ADMIN_KTP');",
+                  "  });",
+                  "  ",
+                  "  pm.environment.set('admin_ktp_token', data.token);",
+                  "} catch (e) {",
+                  "  pm.test('JSON Parse Error', () => { throw new Error('Response parse error: ' + e.message); });",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"admin_ktp\",\n  \"password\": \"AdminKtp123!\",\n  \"device_name\": \"postman\"\n}"
+            },
+            "url": {"raw": "{{base_url}}/api/auth/login", "host": ["{{base_url}}"], "path": ["api", "auth", "login"]}
+          }
+        },
+        {
+          "name": "1.1.3 Login - ADMIN_IKD",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "try {",
+                  "  pm.test('Status 200 OK', function() { pm.response.to.have.status(200); });",
+                  "  let body = pm.response.json();",
+                  "  let data = body.data ?? body;",
+                  "  pm.environment.set('admin_ikd_token', data.token);",
+                  "} catch (e) {",
+                  "  pm.test('JSON Parse Error', () => { throw new Error('Response parse error: ' + e.message); });",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {"mode": "raw", "raw": "{\n  \"username\": \"admin_ikd\",\n  \"password\": \"AdminIkd123!\",\n  \"device_name\": \"postman\"\n}"},
+            "url": {"raw": "{{base_url}}/api/auth/login", "host": ["{{base_url}}"], "path": ["api", "auth", "login"]}
+          }
+        },
+        {
+          "name": "1.1.4 Login - ADMIN_PERKAWINAN",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "try {",
+                  "  pm.test('Status 200 OK', function() { pm.response.to.have.status(200); });",
+                  "  let body = pm.response.json();",
+                  "  let data = body.data ?? body;",
+                  "  pm.environment.set('admin_perkawinan_token', data.token);",
+                  "} catch (e) {",
+                  "  pm.test('JSON Parse Error', () => { throw new Error('Response parse error: ' + e.message); });",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {"mode": "raw", "raw": "{\n  \"username\": \"admin_perkawinan\",\n  \"password\": \"AdminPerkawinan123!\",\n  \"device_name\": \"postman\"\n}"},
+            "url": {"raw": "{{base_url}}/api/auth/login", "host": ["{{base_url}}"], "path": ["api", "auth", "login"]}
+          }
+        },
+        {
+          "name": "1.1.5 Login - RT User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "try {",
+                  "  pm.test('Status 200 OK', function() { pm.response.to.have.status(200); });",
+                  "  let body = pm.response.json();",
+                  "  let data = body.data ?? body;",
+                  "  pm.environment.set('rt_token', data.token);",
+                  "} catch (e) {",
+                  "  pm.test('JSON Parse Error', () => { throw new Error('Response parse error: ' + e.message); });",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {"mode": "raw", "raw": "{\n  \"username\": \"rt_user\",\n  \"password\": \"RtUser123!\",\n  \"device_name\": \"postman\"\n}"},
+            "url": {"raw": "{{base_url}}/api/auth/login", "host": ["{{base_url}}"], "path": ["api", "auth", "login"]}
+          }
+        },
+        {
+          "name": "1.1.6 Login - Invalid Username",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": ["pm.test('Status 401 Unauthorized', function() { pm.response.to.have.status(401); });"]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {"mode": "raw", "raw": "{\n  \"username\": \"invalid_user_12345\",\n  \"password\": \"AnyPassword123!\",\n  \"device_name\": \"postman\"\n}"},
+            "url": {"raw": "{{base_url}}/api/auth/login", "host": ["{{base_url}}"], "path": ["api", "auth", "login"]}
+          }
+        },
+        {
+          "name": "1.1.7 Login - Invalid Password",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": ["pm.test('Status 401 Unauthorized', function() { pm.response.to.have.status(401); });"]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {"mode": "raw", "raw": "{\n  \"username\": \"superadmin\",\n  \"password\": \"WrongPassword123!\",\n  \"device_name\": \"postman\"\n}"},
+            "url": {"raw": "{{base_url}}/api/auth/login", "host": ["{{base_url}}"], "path": ["api", "auth", "login"]}
+          }
+        },
+        {
+          "name": "1.2.1 Refresh Token - Valid",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "try {",
+                  "  pm.test('Status 200 OK', function() { pm.response.to.have.status(200); });",
+                  "  let body = pm.response.json();",
+                  "  let data = body.data ?? body;",
+                  "  ",
+                  "  pm.test('New token generated', function() {",
+                  "    pm.expect(data.token).to.be.a('string');",
+                  "  });",
+                  "  ",
+                  "  pm.environment.set('token', data.token);",
+                  "  if (data.refresh_token) {",
+                  "    pm.environment.set('refresh_token', data.refresh_token);",
+                  "  }",
+                  "} catch (e) {",
+                  "  pm.test('JSON Parse Error', () => { throw new Error('Response parse error: ' + e.message); });",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Authorization", "value": "Bearer {{refresh_token}}"}],
+            "url": {"raw": "{{base_url}}/api/auth/refresh", "host": ["{{base_url}}"], "path": ["api", "auth", "refresh"]}
+          }
+        },
+        {
+          "name": "1.2.2 Refresh Token - Invalid",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": ["pm.test('Status 401 Unauthorized', function() { pm.response.to.have.status(401); });"]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Authorization", "value": "Bearer invalid_token_xyz123"}],
+            "url": {"raw": "{{base_url}}/api/auth/refresh", "host": ["{{base_url}}"], "path": ["api", "auth", "refresh"]}
+          }
+        },
+        {
+          "name": "1.3.1 Logout - Valid",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": ["pm.test('Status 200 OK', function() { pm.response.to.have.status(200); });"]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Authorization", "value": "Bearer {{token}}"}],
+            "url": {"raw": "{{base_url}}/api/auth/logout", "host": ["{{base_url}}"], "path": ["api", "auth", "logout"]}
+          }
+        },
+        {
+          "name": "1.4.1 Me - Get Current User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "try {",
+                  "  pm.test('Status 200 OK', function() { pm.response.to.have.status(200); });",
+                  "  let body = pm.response.json();",
+                  "  let data = body.data ?? body;",
+                  "  ",
+                  "  pm.test('Has user data', function() {",
+                  "    pm.expect(data.username).to.be.a('string');",
+                  "    pm.expect(data.role).to.be.a('string');",
+                  "    pm.expect(data.email).to.be.a('string');",
+                  "  });",
+                  "} catch (e) {",
+                  "  pm.test('JSON Parse Error', () => { throw new Error('Response parse error: ' + e.message); });",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [{"key": "Authorization", "value": "Bearer {{token}}"}],
+            "url": {"raw": "{{base_url}}/api/auth/me", "host": ["{{base_url}}"], "path": ["api", "auth", "me"]}
+          }
+        }
+      ]
+    },
+    {
+      "name": "📋 ADMIN KTP",
+      "item": [
+        {
+          "name": "2.1.1 List KTP - Default (Pending)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "try {",
+                  "  pm.test('Status 200 OK', function() { pm.response.to.have.status(200); });",
+                  "  let body = pm.response.json();",
+                  "  let data = body.data ?? [];",
+                  "  let meta = body.meta ?? {};",
+                  "  ",
+                  "  pm.test('Response has data array', function() {",
+                  "    pm.expect(data).to.be.an('array');",
+                  "  });",
+                  "  ",
+                  "  pm.test('Response has pagination meta', function() {",
+                  "    pm.expect(meta.current_page).to.exist;",
+                  "    pm.expect(meta.per_page).to.exist;",
+                  "    pm.expect(meta.total).to.exist;",
+                  "  });",
+                  "  ",
+                  "  if (data.length > 0) {",
+                  "    pm.environment.set('ktp_id', data[0].id);",
+                  "    pm.test('First KTP has required fields', function() {",
+                  "      pm.expect(data[0].id).to.exist;",
+                  "      pm.expect(data[0].nik).to.exist;",
+                  "      pm.expect(data[0].status).to.exist;",
+                  "    });",
+                  "  }",
+                  "} catch (e) {",
+                  "  pm.test('JSON Parse Error', () => { throw new Error('Response parse error: ' + e.message); });",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [{"key": "Authorization", "value": "Bearer {{admin_ktp_token}}"}],
+            "url": {
+              "raw": "{{base_url}}/api/admin/ktp?status=PENDING&page=1&per_page=15",
+              "host": ["{{base_url}}"],
+              "path": ["api", "admin", "ktp"],
+              "query": [{"key": "status", "value": "PENDING"}, {"key": "page", "value": "1"}, {"key": "per_page", "value": "15"}]
+            }
+          }
+        },
+        {
+          "name": "2.1.2 List KTP - Filter Approved",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "try {",
+                  "  pm.test('Status 200 OK', function() { pm.response.to.have.status(200); });",
+                  "  let body = pm.response.json();",
+                  "  let data = body.data ?? [];",
+                  "  ",
+                  "  if (data.length > 0) {",
+                  "    pm.test('All items have APPROVED status', function() {",
+                  "      data.forEach(item => {",
+                  "        pm.expect(String(item.status).toUpperCase()).to.equal('APPROVED');",
+                  "      });",
+                  "    });",
+                  "  }",
+                  "} catch (e) {",
+                  "  pm.test('JSON Parse Error', () => { throw new Error('Response parse error: ' + e.message); });",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [{"key": "Authorization", "value": "Bearer {{admin_ktp_token}}"}],
+            "url": {"raw": "{{base_url}}/api/admin/ktp?status=APPROVED&page=1&per_page=15", "host": ["{{base_url}}"], "path": ["api", "admin", "ktp"], "query": [{"key": "status", "value": "APPROVED"}, {"key": "page", "value": "1"}, {"key": "per_page", "value": "15"}]}
+          }
+        },
+        {
+          "name": "2.1.3 List KTP - Filter Rejected",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200 OK', function() { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [{"key": "Authorization", "value": "Bearer {{admin_ktp_token}}"}],
+            "url": {"raw": "{{base_url}}/api/admin/ktp?status=REJECTED&page=1&per_page=15", "host": ["{{base_url}}"], "path": ["api", "admin", "ktp"], "query": [{"key": "status", "value": "REJECTED"}, {"key": "page", "value": "1"}, {"key": "per_page", "value": "15"}]}
+          }
+        },
+        {
+          "name": "2.1.4 List KTP - Without Auth (Should Fail)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": ["pm.test('Status 401 Unauthorized', function() { pm.response.to.have.status(401); });"]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {"raw": "{{base_url}}/api/admin/ktp", "host": ["{{base_url}}"], "path": ["api", "admin", "ktp"]}
+          }
+        },
+        {
+          "name": "2.1.5 List KTP - RT User (Should Fail)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": ["pm.test('Status 403 Forbidden', function() { pm.response.to.have.status(403); });"]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [{"key": "Authorization", "value": "Bearer {{rt_token}}"}],
+            "url": {"raw": "{{base_url}}/api/admin/ktp", "host": ["{{base_url}}"], "path": ["api", "admin", "ktp"]}
+          }
+        },
+        {
+          "name": "2.2.1 View KTP Detail - Valid ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "try {",
+                  "  pm.test('Status 200 OK', function() { pm.response.to.have.status(200); });",
+                  "  let body = pm.response.json();",
+                  "  let data = body.data ?? body;",
+                  "  ",
+                  "  pm.test('Has KTP detail data', function() {",
+                  "    pm.expect(data.id).to.exist;",
+                  "    pm.expect(data.nik).to.exist;",
+                  "    pm.expect(data.nama_lengkap).to.exist;",
+                  "    pm.expect(data.status).to.exist;",
+                  "  });",
+                  "} catch (e) {",
+                  "  pm.test('JSON Parse Error', () => { throw new Error('Response parse error: ' + e.message); });",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [{"key": "Authorization", "value": "Bearer {{admin_ktp_token}}"}],
+            "url": {"raw": "{{base_url}}/api/admin/ktp/{{ktp_id}}", "host": ["{{base_url}}"], "path": ["api", "admin", "ktp", "{{ktp_id}}"]}
+          }
+        },
+        {
+          "name": "2.2.2 View KTP Detail - Invalid ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": ["pm.test('Status 404 Not Found', function() { pm.response.to.have.status(404); });"]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [{"key": "Authorization", "value": "Bearer {{admin_ktp_token}}"}],
+            "url": {"raw": "{{base_url}}/api/admin/ktp/invalid_id_xyz", "host": ["{{base_url}}"], "path": ["api", "admin", "ktp", "invalid_id_xyz"]}
+          }
+        },
+        {
+          "name": "2.3.1 Approve KTP - Valid Pending",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "try {",
+                  "  pm.test('Status 200 OK', function() { pm.response.to.have.status(200); });",
+                  "  let body = pm.response.json();",
+                  "  let data = body.data ?? body;",
+                  "  ",
+                  "  pm.test('Status changed to APPROVED', function() {",
+                  "    pm.expect(String(data.status ?? '').toUpperCase()).to.equal('APPROVED');",
+                  "  });",
+                  "} catch (e) {",
+                  "  pm.test('JSON Parse Error', () => { throw new Error('Response parse error: ' + e.message); });",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Authorization", "value": "Bearer {{admin_ktp_token}}"}, {"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"notes\": \"Dokumen lengkap dan valid\"\n}"
+            },
+            "url": {"raw": "{{base_url}}/api/admin/ktp/{{ktp_id}}/approve", "host": ["{{base_url}}"], "path": ["api", "admin", "ktp", "{{ktp_id}}", "approve"]}
+          }
+        },
+        {
+          "name": "2.4.1 Reject KTP - Valid Pending",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "try {",
+                  "  pm.test('Status 200 OK', function() { pm.response.to.have.status(200); });",
+                  "  let body = pm.response.json();",
+                  "  let data = body.data ?? body;",
+                  "  ",
+                  "  pm.test('Status changed to REJECTED', function() {",
+                  "    pm.expect(String(data.status ?? '').toUpperCase()).to.equal('REJECTED');",
+                  "  });",
+                  "} catch (e) {",
+                  "  pm.test('JSON Parse Error', () => { throw new Error('Response parse error: ' + e.message); });",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Authorization", "value": "Bearer {{admin_ktp_token}}"}, {"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reason\": \"Dokumen FC KK tidak jelas dan tidak dapat dibaca\",\n  \"notes\": \"Silakan upload ulang dengan kualitas lebih baik\"\n}"
+            },
+            "url": {"raw": "{{base_url}}/api/admin/ktp/{{ktp_id}}/reject", "host": ["{{base_url}}"], "path": ["api", "admin", "ktp", "{{ktp_id}}", "reject"]}
+          }
+        },
+        {
+          "name": "2.4.2 Reject KTP - Missing Reason",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": ["pm.test('Status 422 Unprocessable', function() { pm.response.to.have.status(422); });"]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Authorization", "value": "Bearer {{admin_ktp_token}}"}, {"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reason\": \"\"\n}"
+            },
+            "url": {"raw": "{{base_url}}/api/admin/ktp/{{ktp_id}}/reject", "host": ["{{base_url}}"], "path": ["api", "admin", "ktp", "{{ktp_id}}", "reject"]}
+          }
+        },
+        {
+          "name": "2.5.1 Schedule KTP - Valid Approved",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "try {",
+                  "  pm.test('Status 200 OK', function() { pm.response.to.have.status(200); });",
+                  "  let body = pm.response.json();",
+                  "  let data = body.data ?? body;",
+                  "  ",
+                  "  pm.test('Status changed to SCHEDULED', function() {",
+                  "    pm.expect(String(data.status ?? '').toUpperCase()).to.equal('SCHEDULED');",
+                  "  });",
+                  "} catch (e) {",
+                  "  pm.test('JSON Parse Error', () => { throw new Error('Response parse error: ' + e.message); });",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Authorization", "value": "Bearer {{admin_ktp_token}}"}, {"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"jadwal_pengambilan\": \"2026-02-15 14:00:00\",\n  \"lokasi_pengambilan\": \"Kantor Kelurahan Pondok Indah\"\n}"
+            },
+            "url": {"raw": "{{base_url}}/api/admin/ktp/{{ktp_id}}/schedule", "host": ["{{base_url}}"], "path": ["api", "admin", "ktp", "{{ktp_id}}", "schedule"]}
+          }
+        },
+        {
+          "name": "2.5.2 Schedule KTP - Past Date (Should Fail)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": ["pm.test('Status 422 or 400', function() { pm.response.to.have.status.oneOf([422, 400]); });"]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Authorization", "value": "Bearer {{admin_ktp_token}}"}, {"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"jadwal_pengambilan\": \"2020-01-01 10:00:00\",\n  \"lokasi_pengambilan\": \"Kantor\"\n}"
+            },
+            "url": {"raw": "{{base_url}}/api/admin/ktp/{{ktp_id}}/schedule", "host": ["{{base_url}}"], "path": ["api", "admin", "ktp", "{{ktp_id}}", "schedule"]}
+          }
+        }
+      ]
+    },
+    {
+      "name": "📋 ADMIN IKD",
+      "item": [
+        {
+          "name": "3.1.1 List IKD - Default",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "try {",
+                  "  pm.test('Status 200 OK', function() { pm.response.to.have.status(200); });",
+                  "  let body = pm.response.json();",
+                  "  let data = body.data ?? [];",
+                  "  ",
+                  "  if (data.length > 0) {",
+                  "    pm.environment.set('ikd_id', data[0].id);",
+                  "  }",
+                  "} catch (e) {",
+                  "  pm.test('JSON Parse Error', () => { throw new Error('Response parse error: ' + e.message); });",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [{"key": "Authorization", "value": "Bearer {{admin_ikd_token}}"}],
+            "url": {"raw": "{{base_url}}/api/admin/ikd?status=PENDING&page=1&per_page=15", "host": ["{{base_url}}"], "path": ["api", "admin", "ikd"], "query": [{"key": "status", "value": "PENDING"}, {"key": "page", "value": "1"}, {"key": "per_page", "value": "15"}]}
+          }
+        },
+        {
+          "name": "3.1.2 List IKD - Filter Approved",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": ["pm.test('Status 200 OK', function() { pm.response.to.have.status(200); });"]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [{"key": "Authorization", "value": "Bearer {{admin_ikd_token}}"}],
+            "url": {"raw": "{{base_url}}/api/admin/ikd?status=APPROVED&page=1&per_page=15", "host": ["{{base_url}}"], "path": ["api", "admin", "ikd"], "query": [{"key": "status", "value": "APPROVED"}, {"key": "page", "value": "1"}, {"key": "per_page", "value": "15"}]}
+          }
+        },
+        {
+          "name": "3.2.1 View IKD Detail",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "try {",
+                  "  pm.test('Status 200 OK', function() { pm.response.to.have.status(200); });",
+                  "  let body = pm.response.json();",
+                  "  let data = body.data ?? body;",
+                  "  ",
+                  "  pm.test('Has IKD detail', function() {",
+                  "    pm.expect(data.id).to.exist;",
+                  "    pm.expect(data.nik).to.exist;",
+                  "  });",
+                  "} catch (e) {",
+                  "  pm.test('JSON Parse Error', () => { throw new Error('Response parse error: ' + e.message); });",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [{"key": "Authorization", "value": "Bearer {{admin_ikd_token}}"}],
+            "url": {"raw": "{{base_url}}/api/admin/ikd/{{ikd_id}}", "host": ["{{base_url}}"], "path": ["api", "admin", "ikd", "{{ikd_id}}"]}
+          }
+        },
+        {
+          "name": "3.3.1 Approve IKD",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "try {",
+                  "  pm.test('Status 200 OK', function() { pm.response.to.have.status(200); });",
+                  "  let body = pm.response.json();",
+                  "  let data = body.data ?? body;",
+                  "  pm.expect(String(data.status ?? '').toUpperCase()).to.equal('APPROVED');",
+                  "} catch (e) {",
+                  "  pm.test('JSON Parse Error', () => { throw new Error('Response parse error: ' + e.message); });",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Authorization", "value": "Bearer {{admin_ikd_token}}"}, {"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"notes\": \"Dokumen lengkap dan terverifikasi\"\n}"
+            },
+            "url": {"raw": "{{base_url}}/api/admin/ikd/{{ikd_id}}/approve", "host": ["{{base_url}}"], "path": ["api", "admin", "ikd", "{{ikd_id}}", "approve"]}
+          }
+        },
+        {
+          "name": "3.4.1 Reject IKD",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "try {",
+                  "  pm.test('Status 200 OK', function() { pm.response.to.have.status(200); });",
+                  "  let body = pm.response.json();",
+                  "  let data = body.data ?? body;",
+                  "  pm.expect(String(data.status ?? '').toUpperCase()).to.equal('REJECTED');",
+                  "} catch (e) {",
+                  "  pm.test('JSON Parse Error', () => { throw new Error('Response parse error: ' + e.message); });",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Authorization", "value": "Bearer {{admin_ikd_token}}"}, {"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reason\": \"Dokumen KK tidak sesuai dengan data NIK\",\n  \"notes\": \"Silakan verifikasi data keluarga kembali\"\n}"
+            },
+            "url": {"raw": "{{base_url}}/api/admin/ikd/{{ikd_id}}/reject", "host": ["{{base_url}}"], "path": ["api", "admin", "ikd", "{{ikd_id}}", "reject"]}
+          }
+        },
+        {
+          "name": "3.5.1 Schedule IKD",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "try {",
+                  "  pm.test('Status 200 OK', function() { pm.response.to.have.status(200); });",
+                  "  let body = pm.response.json();",
+                  "  let data = body.data ?? body;",
+                  "  pm.expect(String(data.status ?? '').toUpperCase()).to.equal('SCHEDULED');",
+                  "} catch (e) {",
+                  "  pm.test('JSON Parse Error', () => { throw new Error('Response parse error: ' + e.message); });",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Authorization", "value": "Bearer {{admin_ikd_token}}"}, {"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"jadwal_pengambilan\": \"2026-02-20 15:30:00\",\n  \"lokasi_pengambilan\": \"Kantor Kelurahan Pondok Indah\"\n}"
+            },
+            "url": {"raw": "{{base_url}}/api/admin/ikd/{{ikd_id}}/schedule", "host": ["{{base_url}}"], "path": ["api", "admin", "ikd", "{{ikd_id}}", "schedule"]}
+          }
+        }
+      ]
+    },
+    {
+      "name": "💍 ADMIN PERKAWINAN",
+      "item": [
+        {
+          "name": "4.1.1 List Perkawinan Requests",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "try {",
+                  "  pm.test('Status 200 OK', function() { pm.response.to.have.status(200); });",
+                  "  let body = pm.response.json();",
+                  "  let data = body.data ?? [];",
+                  "  ",
+                  "  if (data.length > 0) {",
+                  "    pm.environment.set('perkawinan_uuid', data[0].uuid);",
+                  "  }",
+                  "} catch (e) {",
+                  "  pm.test('JSON Parse Error', () => { throw new Error('Response parse error: ' + e.message); });",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [{"key": "Authorization", "value": "Bearer {{admin_perkawinan_token}}"}],
+            "url": {"raw": "{{base_url}}/api/admin/perkawinan?status=PENDING&page=1&per_page=15", "host": ["{{base_url}}"], "path": ["api", "admin", "perkawinan"], "query": [{"key": "status", "value": "PENDING"}, {"key": "page", "value": "1"}, {"key": "per_page", "value": "15"}]}
+          }
+        },
+        {
+          "name": "4.2.1 View Perkawinan Detail",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "try {",
+                  "  pm.test('Status 200 OK', function() { pm.response.to.have.status(200); });",
+                  "  let body = pm.response.json();",
+                  "  let data = body.data ?? body;",
+                  "  ",
+                  "  pm.test('Has Perkawinan detail', function() {",
+                  "    pm.expect(data.uuid).to.exist;",
+                  "    pm.expect(data.nik_calon_pengantin_pria).to.exist;",
+                  "    pm.expect(data.nik_calon_pengantin_wanita).to.exist;",
+                  "  });",
+                  "} catch (e) {",
+                  "  pm.test('JSON Parse Error', () => { throw new Error('Response parse error: ' + e.message); });",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [{"key": "Authorization", "value": "Bearer {{admin_perkawinan_token}}"}],
+            "url": {"raw": "{{base_url}}/api/admin/perkawinan/{{perkawinan_uuid}}", "host": ["{{base_url}}"], "path": ["api", "admin", "perkawinan", "{{perkawinan_uuid}}"]}
+          }
+        },
+        {
+          "name": "4.3.1 Verify Perkawinan",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "try {",
+                  "  pm.test('Status 200 OK', function() { pm.response.to.have.status(200); });",
+                  "  let body = pm.response.json();",
+                  "  let data = body.data ?? body;",
+                  "  ",
+                  "  pm.test('Status VERIFIED', function() {",
+                  "    pm.expect(String(data.status ?? '').toUpperCase()).to.equal('VERIFIED');",
+                  "  });",
+                  "} catch (e) {",
+                  "  pm.test('JSON Parse Error', () => { throw new Error('Response parse error: ' + e.message); });",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Authorization", "value": "Bearer {{admin_perkawinan_token}}"}, {"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nomor_akta_perkawinan\": \"2024/001/SKD-PI/2024\",\n  \"tanggal_pencatatan\": \"2024-03-15\",\n  \"notes\": \"Perkawinan telah tercatat di sistem\"\n}"
+            },
+            "url": {"raw": "{{base_url}}/api/admin/perkawinan/{{perkawinan_uuid}}/verify", "host": ["{{base_url}}"], "path": ["api", "admin", "perkawinan", "{{perkawinan_uuid}}", "verify"]}
+          }
+        },
+        {
+          "name": "4.4.1 Reject Perkawinan",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "try {",
+                  "  pm.test('Status 200 OK', function() { pm.response.to.have.status(200); });",
+                  "  let body = pm.response.json();",
+                  "  let data = body.data ?? body;",
+                  "  pm.expect(String(data.status ?? '').toUpperCase()).to.equal('REJECTED');",
+                  "} catch (e) {",
+                  "  pm.test('JSON Parse Error', () => { throw new Error('Response parse error: ' + e.message); });",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Authorization", "value": "Bearer {{admin_perkawinan_token}}"}, {"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reason\": \"Data calon pengantin tidak lengkap\",\n  \"notes\": \"Dimohon melengkapi dokumen yang kurang\"\n}"
+            },
+            "url": {"raw": "{{base_url}}/api/admin/perkawinan/{{perkawinan_uuid}}/reject", "host": ["{{base_url}}"], "path": ["api", "admin", "perkawinan", "{{perkawinan_uuid}}", "reject"]}
+          }
+        }
+      ]
+    },
+    {
+      "name": "🏘️ RT SUBMISSION & DASHBOARD",
+      "item": [
+        {
+          "name": "5.1.1 Submit KTP Request",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "try {",
+                  "  pm.test('Status 201 Created', function() { pm.response.to.have.status(201); });",
+                  "  let body = pm.response.json();",
+                  "  let data = body.data ?? body;",
+                  "  ",
+                  "  pm.test('Has submission data', function() {",
+                  "    pm.expect(data.id).to.exist;",
+                  "    pm.expect(String(data.status ?? '').toUpperCase()).to.equal('PENDING');",
+                  "  });",
+                  "} catch (e) {",
+                  "  pm.test('JSON Parse Error', () => { throw new Error('Response parse error: ' + e.message); });",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Authorization", "value": "Bearer {{rt_token}}"}, {"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nik\": \"3171010101010001\",\n  \"nama_lengkap\": \"John Doe\",\n  \"no_telepon\": \"081234567890\",\n  \"alamat_lengkap\": \"Jl. Merdeka No. 1, Kelurahan Pondok Indah\"\n}"
+            },
+            "url": {"raw": "{{base_url}}/api/rt/ktp/submit", "host": ["{{base_url}}"], "path": ["api", "rt", "ktp", "submit"]}
+          }
+        },
+        {
+          "name": "5.1.2 Submit KTP - Invalid NIK",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": ["pm.test('Status 422 Validation Error', function() { pm.response.to.have.status(422); });"]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Authorization", "value": "Bearer {{rt_token}}"}, {"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nik\": \"123\",\n  \"nama_lengkap\": \"Test\",\n  \"no_telepon\": \"081234567890\",\n  \"alamat_lengkap\": \"Jalan\"\n}"
+            },
+            "url": {"raw": "{{base_url}}/api/rt/ktp/submit", "host": ["{{base_url}}"], "path": ["api", "rt", "ktp", "submit"]}
+          }
+        },
+        {
+          "name": "5.2.1 Submit IKD Request",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "try {",
+                  "  pm.test('Status 201 Created', function() { pm.response.to.have.status(201); });",
+                  "} catch (e) {",
+                  "  pm.test('JSON Parse Error', () => { throw new Error('Response parse error: ' + e.message); });",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Authorization", "value": "Bearer {{rt_token}}"}, {"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nik\": \"3171010101010002\",\n  \"nama_lengkap\": \"Jane Doe\",\n  \"tanggal_lahir\": \"1990-05-15\",\n  \"jenis_kelamin\": \"P\",\n  \"agama\": \"Islam\",\n  \"pekerjaan\": \"Guru\",\n  \"status_perkawinan\": \"BELUM KAWIN\",\n  \"alamat\": \"Jl. Sudirman No. 5\"\n}"
+            },
+            "url": {"raw": "{{base_url}}/api/rt/ikd/submit", "host": ["{{base_url}}"], "path": ["api", "rt", "ikd", "submit"]}
+          }
+        },
+        {
+          "name": "5.3.1 Get Dashboard Summary",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "try {",
+                  "  pm.test('Status 200 OK', function() { pm.response.to.have.status(200); });",
+                  "  let body = pm.response.json();",
+                  "  let data = body.data ?? body;",
+                  "  ",
+                  "  pm.test('Has dashboard summary', function() {",
+                  "    pm.expect(data).to.be.an('object');",
+                  "  });",
+                  "} catch (e) {",
+                  "  pm.test('JSON Parse Error', () => { throw new Error('Response parse error: ' + e.message); });",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [{"key": "Authorization", "value": "Bearer {{rt_token}}"}],
+            "url": {"raw": "{{base_url}}/api/rt/dashboard/summary", "host": ["{{base_url}}"], "path": ["api", "rt", "dashboard", "summary"]}
+          }
+        },
+        {
+          "name": "5.4.1 Get Notifications",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": ["pm.test('Status 200 OK', function() { pm.response.to.have.status(200); });"]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [{"key": "Authorization", "value": "Bearer {{rt_token}}"}],
+            "url": {"raw": "{{base_url}}/api/rt/notifications?page=1&per_page=10", "host": ["{{base_url}}"], "path": ["api", "rt", "notifications"], "query": [{"key": "page", "value": "1"}, {"key": "per_page", "value": "10"}]}
+          }
+        },
+        {
+          "name": "5.5.1 Get Schedules",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": ["pm.test('Status 200 OK', function() { pm.response.to.have.status(200); });"]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [{"key": "Authorization", "value": "Bearer {{rt_token}}"}],
+            "url": {"raw": "{{base_url}}/api/rt/schedules?page=1&per_page=10&status=upcoming", "host": ["{{base_url}}"], "path": ["api", "rt", "schedules"], "query": [{"key": "page", "value": "1"}, {"key": "per_page", "value": "10"}, {"key": "status", "value": "upcoming"}]}
+          }
+        }
+      ]
+    },
+    {
+      "name": "🌐 PUBLIC PERKAWINAN",
+      "item": [
+        {
+          "name": "6.1.1 Submit Perkawinan (No Auth)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "try {",
+                  "  pm.test('Status 201 Created', function() { pm.response.to.have.status(201); });",
+                  "  let body = pm.response.json();",
+                  "  let data = body.data ?? body;",
+                  "  ",
+                  "  pm.test('Has UUID', function() {",
+                  "    pm.expect(data.uuid).to.be.a('string');",
+                  "    pm.environment.set('perkawinan_uuid', data.uuid);",
+                  "  });",
+                  "} catch (e) {",
+                  "  pm.test('JSON Parse Error', () => { throw new Error('Response parse error: ' + e.message); });",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nik_calon_pengantin_pria\": \"3171010101010003\",\n  \"nik_calon_pengantin_wanita\": \"3171010101010004\",\n  \"nama_calon_pengantin_pria\": \"Ahmad Surya\",\n  \"nama_calon_pengantin_wanita\": \"Siti Nurhaliza\",\n  \"tanggal_perkawinan\": \"2026-03-15\",\n  \"lokasi_perkawinan\": \"Kelurahan Pondok Indah\"\n}"
+            },
+            "url": {"raw": "{{base_url}}/api/public/perkawinan/submit", "host": ["{{base_url}}"], "path": ["api", "public", "perkawinan", "submit"]}
+          }
+        },
+        {
+          "name": "6.1.2 Submit Perkawinan - Invalid NIK",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": ["pm.test('Status 422 Validation Error', function() { pm.response.to.have.status(422); });"]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nik_calon_pengantin_pria\": \"123\",\n  \"nik_calon_pengantin_wanita\": \"456\",\n  \"nama_calon_pengantin_pria\": \"Test\",\n  \"nama_calon_pengantin_wanita\": \"Test\",\n  \"tanggal_perkawinan\": \"2026-03-15\",\n  \"lokasi_perkawinan\": \"Tempat\"\n}"
+            },
+            "url": {"raw": "{{base_url}}/api/public/perkawinan/submit", "host": ["{{base_url}}"], "path": ["api", "public", "perkawinan", "submit"]}
+          }
+        },
+        {
+          "name": "6.2.1 Track Perkawinan Status - Valid",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "try {",
+                  "  pm.test('Status 200 OK', function() { pm.response.to.have.status(200); });",
+                  "  let body = pm.response.json();",
+                  "  let data = body.data ?? body;",
+                  "  ",
+                  "  pm.test('Has status', function() {",
+                  "    pm.expect(data.status).to.be.a('string');",
+                  "  });",
+                  "} catch (e) {",
+                  "  pm.test('JSON Parse Error', () => { throw new Error('Response parse error: ' + e.message); });",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/public/perkawinan/track?uuid={{perkawinan_uuid}}&nik=3171010101010003",
+              "host": ["{{base_url}}"],
+              "path": ["api", "public", "perkawinan", "track"],
+              "query": [{"key": "uuid", "value": "{{perkawinan_uuid}}"}, {"key": "nik", "value": "3171010101010003"}]
+            }
+          }
+        },
+        {
+          "name": "6.2.2 Track Status - Wrong NIK (Should Fail)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": ["pm.test('Status 404 Not Found', function() { pm.response.to.have.status(404); });"]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/public/perkawinan/track?uuid={{perkawinan_uuid}}&nik=9999999999999999",
+              "host": ["{{base_url}}"],
+              "path": ["api", "public", "perkawinan", "track"],
+              "query": [{"key": "uuid", "value": "{{perkawinan_uuid}}"}, {"key": "nik", "value": "9999999999999999"}]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "🔄 REFRESH & DATA CONSISTENCY TEST",
+      "item": [
+        {
+          "name": "Refresh 1 - Get Initial KTP List",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "try {",
+                  "  pm.test('Status 200 OK', function() { pm.response.to.have.status(200); });",
+                  "  let body = pm.response.json();",
+                  "  let meta = body.meta ?? {};",
+                  "  pm.environment.set('initial_total', meta.total ?? 0);",
+                  "  console.log('Initial KTP total:', meta.total);",
+                  "} catch (e) {",
+                  "  pm.test('JSON Parse Error', () => { throw new Error('Response parse error: ' + e.message); });",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [{"key": "Authorization", "value": "Bearer {{superadmin_token}}"}],
+            "url": {"raw": "{{base_url}}/api/admin/ktp?status=PENDING&page=1&per_page=15", "host": ["{{base_url}}"], "path": ["api", "admin", "ktp"], "query": [{"key": "status", "value": "PENDING"}, {"key": "page", "value": "1"}, {"key": "per_page", "value": "15"}]}
+          }
+        },
+        {
+          "name": "Refresh 2 - Refresh Token",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "try {",
+                  "  pm.test('Status 200 OK', function() { pm.response.to.have.status(200); });",
+                  "  let body = pm.response.json();",
+                  "  let data = body.data ?? body;",
+                  "  pm.environment.set('superadmin_token', data.token);",
+                  "} catch (e) {",
+                  "  pm.test('JSON Parse Error', () => { throw new Error('Response parse error: ' + e.message); });",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Authorization", "value": "Bearer {{refresh_token}}"}],
+            "url": {"raw": "{{base_url}}/api/auth/refresh", "host": ["{{base_url}}"], "path": ["api", "auth", "refresh"]}
+          }
+        },
+        {
+          "name": "Refresh 3 - Get KTP List After Refresh",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "try {",
+                  "  pm.test('Status 200 OK', function() { pm.response.to.have.status(200); });",
+                  "  let body = pm.response.json();",
+                  "  let meta = body.meta ?? {};",
+                  "  let initial = pm.environment.get('initial_total');",
+                  "  ",
+                  "  pm.test('Total KTP same after refresh', function() {",
+                  "    pm.expect(meta.total).to.equal(parseInt(initial));",
+                  "  });",
+                  "  console.log('After refresh total:', meta.total, 'Expected:', initial);",
+                  "} catch (e) {",
+                  "  pm.test('JSON Parse Error', () => { throw new Error('Response parse error: ' + e.message); });",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [{"key": "Authorization", "value": "Bearer {{superadmin_token}}"}],
+            "url": {"raw": "{{base_url}}/api/admin/ktp?status=PENDING&page=1&per_page=15", "host": ["{{base_url}}"], "path": ["api", "admin", "ktp"], "query": [{"key": "status", "value": "PENDING"}, {"key": "page", "value": "1"}, {"key": "per_page", "value": "15"}]}
+          }
+        }
+      ]
+    },
+    {
+      "name": "🧪 ERROR SCENARIOS & EDGE CASES",
+      "item": [
+        {
+          "name": "Error 1 - Access Denied (Wrong Role)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": ["pm.test('Status 403 Forbidden', function() { pm.response.to.have.status(403); });"]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [{"key": "Authorization", "value": "Bearer {{rt_token}}"}],
+            "url": {"raw": "{{base_url}}/api/admin/ktp", "host": ["{{base_url}}"], "path": ["api", "admin", "ktp"]}
+          }
+        },
+        {
+          "name": "Error 2 - Missing Authorization Header",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": ["pm.test('Status 401 Unauthorized', function() { pm.response.to.have.status(401); });"]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {"raw": "{{base_url}}/api/admin/ktp", "host": ["{{base_url}}"], "path": ["api", "admin", "ktp"]}
+          }
+        },
+        {
+          "name": "Error 3 - Invalid JSON Body",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": ["pm.test('Status 400 or 422', function() { pm.response.to.have.status.oneOf([400, 422]); });"]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Authorization", "value": "Bearer {{admin_ktp_token}}"}, {"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "invalid json {]"
+            },
+            "url": {"raw": "{{base_url}}/api/admin/ktp/1/reject", "host": ["{{base_url}}"], "path": ["api", "admin", "ktp", "1", "reject"]}
+          }
+        }
+      ]
+    }
+  ]
+}

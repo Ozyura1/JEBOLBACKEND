@@ -99,7 +99,7 @@ php artisan migrate
 php artisan db:seed
 
 # Start server
-php artisan serve
+php artisan serve --host=0.0.0.0 --port=8000
 # API available at: http://localhost:8000/api
 ```
 
@@ -117,6 +117,7 @@ flutter pub get
 # Run app
 flutter run
 ```
+flutter run -d emulator-5554 --verbose
 
 ### 3. DO NOT Start Node.js Backend
 

@@ -33,8 +33,8 @@ class RoleMiddleware
             return ApiResponder::error('Forbidden', Response::HTTP_FORBIDDEN);
         }
 
-        // Roles are provided as comma-separated list
-        $candidates = array_filter(array_map('trim', explode(',', $roles)));
+        // Roles can be separated by pipes (not commas, which Laravel uses for multiple middleware)
+        $candidates = array_filter(array_map('trim', explode('|', $roles)));
 
         // SUPER_ADMIN can access all admin routes
         if (isset($user->role) && $user->role === 'SUPER_ADMIN') {

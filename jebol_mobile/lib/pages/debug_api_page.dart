@@ -1,6 +1,9 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import '../services/api_service.dart';
 
+/// DEBUG PAGE - Only accessible in development mode.
+/// This page is for API testing during development only.
 class DebugApiPage extends StatefulWidget {
   const DebugApiPage({super.key});
 
@@ -20,37 +23,50 @@ class _DebugApiPageState extends State<DebugApiPage> {
     super.dispose();
   }
 
+  void _debugLog(String message) {
+    if (kDebugMode) {
+      debugPrint('[DEBUG_API] $message');
+    }
+  }
+
   Future<void> _loginAndTest() async {
     final username = _usernameController.text.trim();
     final password = _passwordController.text;
 
-    final payload = {'username': username, 'password': password};
     try {
-      print('Calling login with payload: $payload');
+      _debugLog('Calling login...');
       final loginResp = await _api.login(username, password);
-      print('LOGIN RESPONSE: $loginResp');
+      _debugLog('LOGIN RESPONSE: $loginResp');
 
       if (loginResp['success'] == true) {
         try {
-          print('Fetching admin perkawinan list (PENDING)');
-          final listResp = await _api.getAdminPerkawinanList(status: 'PENDING', page: 1);
-          print('LIST RESPONSE: data=${listResp['data']}');
-          print('LIST RESPONSE: meta=${listResp['meta']}');
+          _debugLog('Fetching admin perkawinan list (PENDING)');
+          final listResp = await _api.getAdminPerkawinanList(
+            status: 'PENDING',
+            page: 1,
+          );
+          _debugLog('LIST RESPONSE: data=${listResp['data']}');
+          _debugLog('LIST RESPONSE: meta=${listResp['meta']}');
         } catch (e, s) {
-          print('Error fetching list: $e');
-          print(s);
+          _debugLog('Error fetching list: $e\n$s');
         }
       } else {
-        print('Login unsuccessful, skipping list fetch');
+        _debugLog('Login unsuccessful, skipping list fetch');
       }
     } catch (e, s) {
-      print('Unexpected error during login/test: $e');
-      print(s);
+      _debugLog('Unexpected error during login/test: $e\n$s');
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    // Only show in debug mode
+    if (!kDebugMode) {
+      return const Scaffold(
+        body: Center(child: Text('Debug page not available in release mode')),
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(title: const Text('Debug API Page')),
       body: Padding(
@@ -76,17 +92,14 @@ class _DebugApiPageState extends State<DebugApiPage> {
             const SizedBox(height: 8),
             ElevatedButton(
               onPressed: () async {
-                // quick login-only call
                 try {
                   final username = _usernameController.text.trim();
                   final password = _passwordController.text;
-                  final payload = {'username': username, 'password': password};
-                  print('Calling login (only) with payload: $payload');
+                  _debugLog('Calling login (only)...');
                   final r = await _api.login(username, password);
-                  print('LOGIN ONLY RESPONSE: $r');
+                  _debugLog('LOGIN ONLY RESPONSE: $r');
                 } catch (e, s) {
-                  print('Login only error: $e');
-                  print(s);
+                  _debugLog('Login only error: $e\n$s');
                 }
               },
               child: const Text('LOGIN ONLY'),

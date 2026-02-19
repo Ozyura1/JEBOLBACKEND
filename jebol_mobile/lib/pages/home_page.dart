@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import '../models/user_role.dart';
-import '../providers/auth_provider.dart';
-import '../widgets/custom_button.dart';
+import '../core/constants/roles.dart';
+import '../core/auth/auth_provider.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -19,7 +18,7 @@ class HomePage extends StatelessWidget {
         centerTitle: true,
         backgroundColor: Colors.blue.shade900,
         actions: [
-          if (user != null && user.role != UserRole.public)
+          if (user != null)
             IconButton(
               icon: const Icon(Icons.logout),
               onPressed: () async {
@@ -81,28 +80,28 @@ class HomePage extends StatelessWidget {
           onTap: () => context.go('/super-admin'),
         ),
       ]);
-    } else if (role == UserRole.admin1) {
+    } else if (role == UserRole.adminKtp) {
       items.addAll([
         _MenuItem(
           title: 'Pembuatan KTP',
           subtitle: 'Proses permohonan KTP baru',
-          onTap: () => context.go('/admin1/ktp'),
+          onTap: () => context.go('/admin/ktp'),
         ),
       ]);
-    } else if (role == UserRole.admin2) {
+    } else if (role == UserRole.adminIkd) {
       items.addAll([
         _MenuItem(
           title: 'Aktivasi IKD',
           subtitle: 'Aktivasi Identitas Kependudukan Digital',
-          onTap: () => context.go('/admin2/ikd'),
+          onTap: () => context.go('/admin/ikd'),
         ),
       ]);
-    } else if (role == UserRole.admin3) {
+    } else if (role == UserRole.adminPerkawinan) {
       items.addAll([
         _MenuItem(
           title: 'Pencatatan Perkawinan',
           subtitle: 'Proses pencatatan pernikahan',
-          onTap: () => context.go('/admin3/perkawinan'),
+          onTap: () => context.go('/admin/perkawinan'),
         ),
       ]);
     } else if (role == UserRole.rt) {
@@ -111,19 +110,6 @@ class HomePage extends StatelessWidget {
           title: 'Verifikasi RT',
           subtitle: 'Verifikasi data warga',
           onTap: () => context.go('/rt/verification'),
-        ),
-      ]);
-    } else if (role == UserRole.public) {
-      items.addAll([
-        _MenuItem(
-          title: 'Permohonan Layanan',
-          subtitle: 'Ajukan permohonan KTP, KK, dll.',
-          onTap: () => context.go('/public/request'),
-        ),
-        _MenuItem(
-          title: 'Cek Status',
-          subtitle: 'Cek status permohonan',
-          onTap: () => context.go('/public/status'),
         ),
       ]);
     }

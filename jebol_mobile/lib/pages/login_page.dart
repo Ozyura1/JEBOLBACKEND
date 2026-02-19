@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import '../providers/auth_provider.dart';
-import '../models/user_role.dart';
-import '../utils/validators.dart';
+import '../core/auth/auth_provider.dart';
+import '../core/routing/route_paths.dart';
 import '../widgets/custom_button.dart';
 
 class LoginPage extends StatefulWidget {
@@ -33,30 +32,7 @@ class _LoginPageState extends State<LoginPage> {
     setState(() => _isLoading = false);
 
     if (success) {
-      // Check allowed roles after login
-      final user = authProvider.currentUser;
-      if (user != null &&
-          [
-            UserRole.superAdmin,
-            UserRole.admin1,
-            UserRole.admin2,
-            UserRole.admin3,
-            UserRole.rt,
-          ].contains(user.role)) {
-        if (mounted) context.go('/home');
-      } else {
-        // Block Public User and others
-        await authProvider.logout();
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text(
-                'Akses ditolak. Hanya Super Admin, Admin 1/2/3, dan RT yang dapat login.',
-              ),
-            ),
-          );
-        }
-      }
+      if (mounted) context.go(RoutePaths.login);
     } else {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
