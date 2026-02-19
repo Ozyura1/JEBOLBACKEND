@@ -6,7 +6,7 @@
         "node": ">=20.19.0"
     },
     "scripts": {
-        "build": "vite build",
+        "build": "echo 'skip frontend build on Railway (API-only deployment)'",
         "dev": "vite"
     },
     "devDependencies": {
